@@ -1,5 +1,4 @@
 /* Creating table and copying data from CSV */
-
 CREATE TABLE food_prices_ph(
 	date date,
 	admin1 varchar(50),

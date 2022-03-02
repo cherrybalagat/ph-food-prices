@@ -23,7 +23,6 @@ DELIMITER ','
 CSV header;
 
 /* Changing column names and deleting unnecessary columns */
-
 ALTER TABLE food_prices_ph
 RENAME admin1 TO region;
 
@@ -35,12 +34,10 @@ DROP COLUMN longitude,
 DROP COLUMN priceflag;
 
 /* Change day in date from 15 to 1 */
-
 UPDATE food_prices_ph
 SET date = DATE_TRUNC('month',date);
 
 /* Capitalize first letter of category */
-
 UPDATE food_prices_ph
 SET category = UPPER(SUBSTRING(category, 1, 1)) ||
      		           LOWER(SUBSTRING(category, 2, length(category)));	
@@ -54,7 +51,6 @@ SET year = EXTRACT (YEAR from date);
 
 /* Delete commodities that have price data for two years only.
 (There are no commodities with data for three years which is why '4' is used for COUNT) */
-
 DELETE FROM food_prices_ph
 WHERE commodity IN
 	(SELECT commodity 
@@ -64,7 +60,6 @@ HAVING
 	COUNT (DISTINCT year) < 4);
 
 /* Delete commodities with 'skipped' year values */
-
 WITH cte_yrs AS
 (SELECT commodity, 
  	year, 

@@ -29,6 +29,7 @@ ALTER TABLE food_prices_ph
 RENAME admin2 TO province;
 
 ALTER TABLE food_prices_ph
+DROP COLUMN latitude,
 DROP COLUMN longitude,
 DROP COLUMN priceflag;
 
@@ -48,17 +49,16 @@ ADD COLUMN year double precision;
 UPDATE food_prices_ph
 SET year = EXTRACT (YEAR from date);
 
-/* Delete commodities that have price data for two years only.
-(There are no commodities with data for three years which is why '4' is used for COUNT) */
+/* Delete commodities that have price data for only two years */
 DELETE FROM food_prices_ph
 WHERE commodity IN
 	(SELECT commodity 
 	FROM food_prices_ph 
 	GROUP BY commodity, region
 HAVING 
-	COUNT (DISTINCT year) < 4);
+	COUNT (DISTINCT year) < 3);
 
-/* Delete commodities with 'skipped' year values */
+/* Delete commodities with data for non-continuous years */
 WITH cte_yrs AS
 (SELECT commodity, 
  	year, 
